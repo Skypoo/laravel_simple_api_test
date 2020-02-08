@@ -12,7 +12,7 @@ class UserController extends Controller
     private $userRepository;
     public function __construct()
     {
-        $this->userRepository = new UserRepository(new User());
+        $this->userRepository = new UserRepository();
     }
 
     public function create(Request $request)

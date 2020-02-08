@@ -11,7 +11,7 @@ class UserRepository
 
     public function __construct()
     {
-        $this->user = User::query();
+        $this->user = new User();
     }
 
     public function create($input)
