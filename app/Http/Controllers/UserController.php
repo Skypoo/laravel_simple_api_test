@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
+use App\Http\Requests\UserRequest;
 use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -30,7 +30,7 @@ class UserController extends Controller
                     'IsOK' => false
                 ]
             ];
-            return response()->json($result, 200, array('Content-Type' => 'application/json'));
+            return response()->json($result, 200);
         }
 
         try {
@@ -48,7 +48,7 @@ class UserController extends Controller
                     'IsOK' => true
                 ]
             ];
-            return response()->json($result, 200, array('Content-Type' => 'application/json'));
+            return response()->json($result, 200);
         } catch (\Exception $e) {
             $result = [
                 'Code' => 100,
@@ -58,7 +58,7 @@ class UserController extends Controller
                 ]
             ];
 
-            return response()->json($result, 200, array('Content-Type' => 'application/json'));
+            return response()->json($result, 200);
         }
     }
 
@@ -76,7 +76,7 @@ class UserController extends Controller
                     'IsOK' => false
                 ]
             ];
-            return response()->json($result, 200, array('Content-Type' => 'application/json'));
+            return response()->json($result, 200);
         }
 
         try {
@@ -89,7 +89,7 @@ class UserController extends Controller
                     'IsOK' => true
                 ]
             ];
-            return response()->json($result, 200, array('Content-Type' => 'application/json'));
+            return response()->json($result, 200);
         } catch (\Exception $e) {
             $result = [
                 'Code' => 100,
@@ -99,28 +99,12 @@ class UserController extends Controller
                 ]
             ];
 
-            return response()->json($result, 200, array('Content-Type' => 'application/json'));
+            return response()->json($result, 200);
         }
     }
 
-    public function change(Request $request)
+    public function change(UserRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'Account' => 'required|string|max:50|exists:user,account',
-            'Password' => 'required|string|max:50',
-        ]);
-
-        if ($validator->fails()) {
-            $result = [
-                'Code' => 200,
-                'Message' => $validator->errors()->toArray(),
-                'Result' => [
-                    'IsOK' => false
-                ]
-            ];
-            return response()->json($result, 200, array('Content-Type' => 'application/json'));
-        }
-
         try {
             $this->userRepository->resetPassword(['password' => $request['Password']], $request['Account']);
 
@@ -131,7 +115,7 @@ class UserController extends Controller
                     'IsOK' => true
                 ]
             ];
-            return response()->json($result, 200, array('Content-Type' => 'application/json'));
+            return response()->json($result, 200);
         } catch (\Exception $e) {
             $result = [
                 'Code' => 100,
@@ -141,28 +125,12 @@ class UserController extends Controller
                 ]
             ];
 
-            return response()->json($result, 200, array('Content-Type' => 'application/json'));
+            return response()->json($result, 200);
         }
     }
 
-    public function login(Request $request)
+    public function login(UserRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'Account' => 'required|string|max:50|exists:user,account',
-            'Password' => 'required|string|max:50',
-        ]);
-
-        if ($validator->fails()) {
-            $result = [
-                'Code' => 200,
-                'Message' => $validator->errors()->toArray(),
-                'Result' => [
-                    'IsOK' => false
-                ]
-            ];
-            return response()->json($result, 200, array('Content-Type' => 'application/json'));
-        }
-
         try {
             $user = $this->userRepository->checkLogin($request['Account'], $request['Password']);
 
@@ -182,7 +150,7 @@ class UserController extends Controller
                 ];
             }
 
-            return response()->json($result, $status, array('Content-Type' => 'application/json'));
+            return response()->json($result, $status);
         } catch (\Exception $e) {
             $result = [
                 'Code' => 100,
@@ -192,7 +160,7 @@ class UserController extends Controller
                 ]
             ];
 
-            return response()->json($result, 200, array('Content-Type' => 'application/json'));
+            return response()->json($result, 200);
         }
     }
 }
